@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _login(context) async {
-    LoginDao.login(username: username!, password: password!);
+    await LoginDao.login(username: username!, password: password!);
     NavigatorUtil.goToHome(context);
   }
 
