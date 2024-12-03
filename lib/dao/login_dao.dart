@@ -12,7 +12,7 @@ class LoginDao {
     Map<String, String> params = {};
     params["userName"] = username;
     params["password"] = password;
-    var uri = Uri.https('api.devio.org', '/uapi/user/login', params);
+    var uri = Uri.http('api.devio.org', '/uapi/user/login', params);
     var response = await http.post(uri, headers: hiHeader());
     Utf8Decoder utf8decoder = const Utf8Decoder();
     String bodyString = utf8decoder.convert(response.bodyBytes);

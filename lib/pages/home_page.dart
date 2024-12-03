@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:trip_flutter/widget/banner_widget.dart';
+import 'package:trip_flutter/dao/home_dao.dart';
+import 'package:trip_flutter/model/home_model.dart';
 
 import '../dao/login_dao.dart';
+import '../widget/banner_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+  static Config? configModel;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -15,13 +18,17 @@ class _HomePageState extends State<HomePage>
   double appBarAlpha = 0;
   static const appBarScrollOffset = 100;
 
-  final List<String> bannerList = [
-    'https://gips3.baidu.com/it/u=1039279337,1441343044&fm=3028&app=3028&f=JPEG&fmt=auto&q=100&size=f1024_1024',
-    'https://inews.gtimg.com/om_bt/O0e2a37GGF5CDfNgK8GU29rF_2eJlHLDsa17LABXns7V4AA/641',
-    'https://img2.baidu.com/it/u=2822780089,1763663082&fm=253&fmt=auto&app=138&f=JPEG?w=1067&h=800',
-    'https://pic.quanjing.com/kk/l0/QJ8669121073.jpg?x-oss-process=style/794ws',
-    'https://wx1.sinaimg.cn/mw690/4ca91c90ly1hvbimemyeaj22c0340kjo.jpg',
-  ];
+  List<CommonModel> bannerListModel = [];
+  List<CommonModel> localNavListModel = [];
+  List<CommonModel> subNavListModel = [];
+  GridNav? gridNavModel;
+  SalesBox? salesBoxModel;
+
+  @override
+  void initState() {
+    super.initState();
+    _handleRefresh();
+  }
 
   get _logoutBtn => ElevatedButton(
       onPressed: () {
@@ -41,7 +48,8 @@ class _HomePageState extends State<HomePage>
 
   get _listView => ListView(
         children: [
-          BannerWidget(bannerList),
+          BannerWidget(bannerListModel),
+          Text(gridNavModel?.hotel?.item1?.title ?? ""),
           _logoutBtn,
           const SizedBox(
             height: 800,
@@ -87,5 +95,22 @@ class _HomePageState extends State<HomePage>
     setState(() {
       appBarAlpha = alpha;
     });
+  }
+
+  Future<void> _handleRefresh() async {
+    try {
+      HomeModel homeModel = await HomeDao.fetch();
+      debugPrint(homeModel.bannerList.toString());
+      setState(() {
+        HomePage.configModel = homeModel.config;
+        bannerListModel = homeModel.bannerList ?? [];
+        localNavListModel = homeModel.localNavList ?? [];
+        subNavListModel = homeModel.subNavList ?? [];
+        gridNavModel = homeModel.gridNav;
+        salesBoxModel = homeModel.salesBox;
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }
