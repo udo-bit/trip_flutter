@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:trip_flutter/dao/home_dao.dart';
 import 'package:trip_flutter/model/home_model.dart';
+import 'package:trip_flutter/widget/local_nav_widget.dart';
 
 import '../dao/login_dao.dart';
 import '../widget/banner_widget.dart';
+import '../widget/grid_nav_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -49,7 +51,11 @@ class _HomePageState extends State<HomePage>
   get _listView => ListView(
         children: [
           BannerWidget(bannerListModel),
-          Text(gridNavModel?.hotel?.item1?.title ?? ""),
+          LocalNavWidget(localNavList: localNavListModel),
+          if (gridNavModel != null)
+            GridNavWidget(
+              gridNav: gridNavModel!,
+            ),
           _logoutBtn,
           const SizedBox(
             height: 800,
