@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:trip_flutter/dao/home_dao.dart';
 import 'package:trip_flutter/model/home_model.dart';
+import 'package:trip_flutter/widget/loading_container.dart';
 import 'package:trip_flutter/widget/local_nav_widget.dart';
+import 'package:trip_flutter/widget/sales_box_widget.dart';
+import 'package:trip_flutter/widget/sub_nav_widget.dart';
 
 import '../dao/login_dao.dart';
 import '../widget/banner_widget.dart';
@@ -25,6 +28,25 @@ class _HomePageState extends State<HomePage>
   List<CommonModel> subNavListModel = [];
   GridNav? gridNavModel;
   SalesBox? salesBoxModel;
+
+  bool _loading = true;
+
+  get _contentView => MediaQuery.removePadding(
+      removeTop: true,
+      context: context,
+      child: RefreshIndicator(
+        color: Colors.blue,
+        onRefresh: _handleRefresh,
+        child: NotificationListener(
+          onNotification: (notification) {
+            if (notification is ScrollNotification && notification.depth == 0) {
+              _onScroll(notification.metrics.pixels);
+            }
+            return false;
+          },
+          child: _listView,
+        ),
+      ));
 
   @override
   void initState() {
@@ -56,11 +78,13 @@ class _HomePageState extends State<HomePage>
             GridNavWidget(
               gridNav: gridNavModel!,
             ),
-          _logoutBtn,
-          const SizedBox(
-            height: 800,
-            child: ListTile(title: Text("哈哈")),
-          )
+          SubNavWidget(subNavList: subNavListModel),
+          if (salesBoxModel != null) SalesBoxWidget(salesBox: salesBoxModel!),
+          // _logoutBtn,
+          // const SizedBox(
+          //   height: 800,
+          //   child: ListTile(title: Text("哈哈")),
+          // )
         ],
       );
 
@@ -68,24 +92,13 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-        body: Stack(
-      children: [
-        MediaQuery.removePadding(
-            removeTop: true,
-            context: context,
-            child: NotificationListener(
-              onNotification: (notification) {
-                if (notification is ScrollNotification &&
-                    notification.depth == 0) {
-                  _onScroll(notification.metrics.pixels);
-                }
-                return false;
-              },
-              child: _listView,
-            )),
-        _appBar
-      ],
-    ));
+        backgroundColor: const Color(0xfff2f2f2),
+        body: LoadingContainer(
+          isLoading: _loading,
+          child: Stack(
+            children: [_contentView, _appBar],
+          ),
+        ));
   }
 
   @override
@@ -114,9 +127,13 @@ class _HomePageState extends State<HomePage>
         subNavListModel = homeModel.subNavList ?? [];
         gridNavModel = homeModel.gridNav;
         salesBoxModel = homeModel.salesBox;
+        _loading = false;
       });
     } catch (e) {
       debugPrint(e.toString());
+      setState(() {
+        _loading = false;
+      });
     }
   }
 }
