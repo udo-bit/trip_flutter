@@ -63,6 +63,7 @@ class _HomePageState extends State<HomePage>
   get _appBar => Opacity(
       opacity: appBarAlpha,
       child: Container(
+        padding: const EdgeInsets.only(top: 20),
         height: 80,
         decoration: const BoxDecoration(color: Colors.white),
         child: const Center(
