@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:trip_flutter/navigator/tab_navigator.dart';
 import 'package:trip_flutter/pages/login_page.dart';
 
@@ -23,5 +24,14 @@ class NavigatorUtil {
   static goToLogin() {
     Navigator.pushReplacement(
         _context!, MaterialPageRoute(builder: (context) => const LoginPage()));
+  }
+
+  static pop(BuildContext context) {
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    } else {
+      //退出APP
+      SystemNavigator.pop();
+    }
   }
 }

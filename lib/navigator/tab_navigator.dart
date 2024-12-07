@@ -29,7 +29,14 @@ class _TabNavigatorState extends State<TabNavigator> {
         },
         controller: _controller,
         // physics: const NeverScrollableScrollPhysics(),
-        children: const [HomePage(), SearchPage(), TravelPage(), MyPage()],
+        children: const [
+          HomePage(),
+          SearchPage(
+            hideLeft: true,
+          ),
+          TravelPage(),
+          MyPage()
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
