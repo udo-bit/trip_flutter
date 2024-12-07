@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:trip_flutter/dao/search_dao.dart';
 import 'package:trip_flutter/model/search_model.dart';
 import 'package:trip_flutter/util/navigator_util.dart';
 import 'package:trip_flutter/util/view_util.dart';
 import 'package:trip_flutter/widget/search_bar_widget.dart';
+import 'package:trip_flutter/widget/search_item_widget.dart';
 
 class SearchPage extends StatefulWidget {
   final String? hint;
@@ -21,6 +20,14 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   SearchModel? searchModel;
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.keyword != null) {
+      _onTextChange(widget.keyword!);
+    }
+  }
+
   get _appBar {
     double top = MediaQuery.of(context).padding.top;
     return shadowWrap(
@@ -33,6 +40,9 @@ class _SearchPageState extends State<SearchPage> {
             defaultText: widget.keyword,
             hint: widget.hint,
             leftButtonClick: () => NavigatorUtil.pop(context),
+            rightButtonClick: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
             onChanged: _onTextChange,
           ),
         ),
@@ -41,6 +51,7 @@ class _SearchPageState extends State<SearchPage> {
 
   get _listView => MediaQuery.removePadding(
         context: context,
+        removeTop: true,
         child: Expanded(
           child: ListView.builder(
               itemCount: searchModel?.data?.length ?? 0,
@@ -53,10 +64,9 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xffa9a9a9),
         body: Column(
-          children: [_appBar, _listView],
-        ));
+      children: [_appBar, _listView],
+    ));
   }
 
   void _onTextChange(String value) async {
@@ -75,6 +85,10 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _item(int index) {
     var item = searchModel?.data?[index];
-    return Text(jsonEncode(item));
+    if (item == null) return Container();
+    return SearchItemWidget(
+      searchItem: item,
+      searchModel: searchModel!,
+    );
   }
 }
