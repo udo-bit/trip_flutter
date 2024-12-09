@@ -136,7 +136,7 @@ class _HiWebViewState extends State<HiWebView> {
   _backButton(Color backButtonColor) {
     return GestureDetector(
       onTap: () {
-        NavigatorUtil.pop(context);
+        NavigatorUtil.pop(context, isWebView: true);
       },
       child: Container(
         margin: const EdgeInsets.only(left: 10),

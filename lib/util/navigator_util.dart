@@ -27,12 +27,16 @@ class NavigatorUtil {
         _context!, MaterialPageRoute(builder: (context) => const LoginPage()));
   }
 
-  static pop(BuildContext context) {
+  static pop(BuildContext context, {bool isWebView = false}) {
     if (Navigator.canPop(context)) {
       Navigator.pop(context);
     } else {
-      //退出APP
-      SystemNavigator.pop();
+      if (!isWebView) {
+        // 退出App
+        SystemNavigator.pop();
+      } else {
+        debugPrint('WebView页面，不执行SystemNavigator.pop');
+      }
     }
   }
 
