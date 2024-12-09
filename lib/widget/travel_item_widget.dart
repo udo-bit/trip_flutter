@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:trip_flutter/model/travel_tab_model.dart';
+import 'package:trip_flutter/util/navigator_util.dart';
 
 class TravelItemWidget extends StatelessWidget {
   final TravelItem item;
@@ -67,7 +68,10 @@ class TravelItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        String? url = _findJumpUrl();
+        NavigatorUtil.jumpH5(url: url, title: '详情');
+      },
       child: Card(
         child: PhysicalModel(
           color: Colors.transparent,
@@ -132,5 +136,18 @@ class TravelItemWidget extends StatelessWidget {
     return item.article?.pois == null || item.article!.pois!.isEmpty
         ? '未知'
         : item.article?.pois?[0].poiName ?? "未知";
+  }
+
+  ///查找帖子跳转链接
+  String? _findJumpUrl() {
+    if (item.article?.urls?.isEmpty ?? false) {
+      return null;
+    }
+    for (var url in item.article!.urls!) {
+      if (url.h5Url != null) {
+        return url.h5Url;
+      }
+    }
+    return null;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../model/home_model.dart';
+import '../util/navigator_util.dart';
 
 class SubNavWidget extends StatelessWidget {
   final List<CommonModel>? subNavList;
@@ -51,7 +52,13 @@ class SubNavWidget extends StatelessWidget {
   Widget _item(BuildContext context, CommonModel model) {
     return Expanded(
         child: GestureDetector(
-      onTap: () {},
+      onTap: () {
+        NavigatorUtil.jumpH5(
+            url: model.url,
+            title: model.title,
+            statusBarColor: model.statusBarColor,
+            hideAppBar: model.hideAppBar);
+      },
       child: Column(
         children: [
           Image.network(

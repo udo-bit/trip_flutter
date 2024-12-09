@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:trip_flutter/model/home_model.dart';
+import 'package:trip_flutter/util/navigator_util.dart';
 import 'package:trip_flutter/util/screen_helper.dart';
 
 class BannerWidget extends StatefulWidget {
@@ -39,10 +40,13 @@ class _BannerWidgetState extends State<BannerWidget> {
     );
   }
 
-  Widget _tabImage(CommonModel item, double width) {
+  Widget _tabImage(CommonModel model, double width) {
     return GestureDetector(
-      onTap: () {},
-      child: Image.network(item.icon!, width: width, fit: BoxFit.cover),
+      onTap: () {
+        NavigatorUtil.jumpH5(
+            url: model.url, title: model.title, hideAppBar: model.hideAppBar);
+      },
+      child: Image.network(model.icon!, width: width, fit: BoxFit.cover),
     );
   }
 

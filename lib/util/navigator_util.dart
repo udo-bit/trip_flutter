@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:trip_flutter/navigator/tab_navigator.dart';
 import 'package:trip_flutter/pages/login_page.dart';
+import 'package:trip_flutter/widget/hi_webview.dart';
 
 class NavigatorUtil {
   static BuildContext? _context;
@@ -33,5 +34,35 @@ class NavigatorUtil {
       //退出APP
       SystemNavigator.pop();
     }
+  }
+
+  static jumpH5(
+      {BuildContext? context,
+      String? url,
+      String? title,
+      bool? hideAppBar,
+      String? statusBarColor}) {
+    BuildContext? safeContext;
+    if (url == null) {
+      debugPrint('url is null jumpH5 failed');
+      return;
+    }
+    if (context != null) {
+      safeContext = context;
+    } else if (_context?.mounted ?? false) {
+      safeContext = _context;
+    } else {
+      debugPrint('context is null jumpH5 failed.');
+      return;
+    }
+    Navigator.push(
+        safeContext!,
+        MaterialPageRoute(
+            builder: (context) => HiWebView(
+                  url: url,
+                  hideAppBar: hideAppBar,
+                  title: title,
+                  statusBarColor: statusBarColor,
+                )));
   }
 }

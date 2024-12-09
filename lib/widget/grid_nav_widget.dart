@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trip_flutter/util/navigator_util.dart';
 
 import '../model/home_model.dart';
 
@@ -71,9 +72,16 @@ class GridNavWidget extends StatelessWidget {
         model);
   }
 
-  Widget _wrapGesture(
-      BuildContext context, Widget widget, CommonModel commonModel) {
-    return GestureDetector(onTap: () {}, child: widget);
+  Widget _wrapGesture(BuildContext context, Widget widget, CommonModel model) {
+    return GestureDetector(
+        onTap: () {
+          NavigatorUtil.jumpH5(
+              url: model.url,
+              title: model.title,
+              statusBarColor: model.statusBarColor,
+              hideAppBar: model.hideAppBar);
+        },
+        child: widget);
   }
 
   Widget _doubleItem(
