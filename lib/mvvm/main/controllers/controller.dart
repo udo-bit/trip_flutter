@@ -6,7 +6,7 @@ class MainViewModel extends GetxController {
   final PageController controller = PageController(initialPage: 0);
 
   void onBottomNavTap(int index) {
-    currentIndex.value = index;
+    currentIndex(index);
     controller.jumpToPage(index);
   }
 }

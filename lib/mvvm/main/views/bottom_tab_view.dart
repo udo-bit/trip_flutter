@@ -30,6 +30,7 @@ class BottomTabView extends GetView<MainViewModel> {
           bottomNavigationBar: BottomNavigationBar(
             fixedColor: Colors.blue,
             currentIndex: controller.currentIndex.value,
+            onTap: controller.onBottomNavTap,
             type: BottomNavigationBarType.fixed,
             items: [
               _bottomItem("首页", Icons.home, 0),

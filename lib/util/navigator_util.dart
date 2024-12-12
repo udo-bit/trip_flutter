@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:trip_flutter/pages/login_page.dart';
 import 'package:trip_flutter/widget/hi_webview.dart';
 
 import '../mvvm/routes/app_pages.dart';
@@ -18,7 +17,7 @@ class NavigatorUtil {
   }
 
   // 跳转首页
-  static goToHome(BuildContext context) {
+  static goToHome() {
     // Navigator.pushReplacement(
     //     context, MaterialPageRoute(builder: (context) => const TabNavigator()));
     // Get.offAll(const TabNavigator());
@@ -29,7 +28,7 @@ class NavigatorUtil {
   static goToLogin() {
     // Navigator.pushReplacement(
     //     _context!, MaterialPageRoute(builder: (context) => const LoginPage()));
-    Get.off(const LoginPage());
+    Get.offNamed(Routes.LOGIN);
   }
 
   static pop(BuildContext context, {bool isWebView = false}) {
