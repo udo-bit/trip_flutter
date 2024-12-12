@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hi_cache/flutter_hi_cache.dart';
 import 'package:get/get.dart';
-import 'package:trip_flutter/dao/login_dao.dart';
-import 'package:trip_flutter/navigator/tab_navigator.dart';
-import 'package:trip_flutter/pages/login_page.dart';
-import 'package:trip_flutter/util/screen_helper.dart';
+import 'package:trip_flutter/mvvm/binding/initial_binding.dart';
+import 'package:trip_flutter/mvvm/routes/app_pages.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,28 +14,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
-          useMaterial3: true,
-        ),
-        home: FutureBuilder<dynamic>(
-          future: HiCache.preInit(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            ScreenHelper.init(context);
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (LoginDao.getBoardingPass() != null) {
-                return const TabNavigator();
-              } else {
-                return const LoginPage();
-              }
-            } else {
-              return const Scaffold(
-                  body: Center(
-                child: CircularProgressIndicator(),
-              ));
-            }
-          },
-        ));
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
+        useMaterial3: true,
+      ),
+      initialRoute: AppPages.init,
+      initialBinding: InitialBinding(),
+      getPages: AppPages.routes,
+    );
   }
 }

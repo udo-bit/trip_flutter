@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:trip_flutter/navigator/tab_navigator.dart';
 import 'package:trip_flutter/pages/login_page.dart';
 import 'package:trip_flutter/widget/hi_webview.dart';
+
+import '../mvvm/routes/app_pages.dart';
 
 class NavigatorUtil {
   static BuildContext? _context;
@@ -20,7 +21,8 @@ class NavigatorUtil {
   static goToHome(BuildContext context) {
     // Navigator.pushReplacement(
     //     context, MaterialPageRoute(builder: (context) => const TabNavigator()));
-    Get.offAll(const TabNavigator());
+    // Get.offAll(const TabNavigator());
+    Get.offAllNamed(Routes.MAIN);
   }
 
   // 跳转到登陆页
