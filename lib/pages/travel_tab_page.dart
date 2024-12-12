@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:trip_flutter/controller/travel_controller.dart';
+import 'package:trip_flutter/controller/travel_tab_controller.dart';
 import 'package:trip_flutter/widget/loading_container.dart';
 import 'package:trip_flutter/widget/travel_item_widget.dart';
 

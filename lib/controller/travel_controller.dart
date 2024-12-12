@@ -1,66 +1,26 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:trip_flutter/dao/travel_dao.dart';
 
-import '../dao/travel_dao.dart';
-import '../model/travel_tab_model.dart';
+import '../model/travel_category_model.dart';
 
-class TravelController extends GetxController {
-  final String groupChannelCode;
-
-  TravelController(this.groupChannelCode);
-  List<TravelItem> travelItems = <TravelItem>[].obs;
-  final loading = true.obs;
-  int pageIndex = 1;
-  final scrollController = ScrollController();
-
+class TravelController extends GetxController with GetTickerProviderStateMixin {
+  List<TravelTab> tabs = [];
+  late TabController controller;
   @override
   void onInit() {
     super.onInit();
-    loadData();
-    scrollController.addListener(() {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        loadData(loadMore: true);
-      }
+    controller = TabController(length: 0, vsync: this);
+    TravelDao.getCategory().then((TravelCategoryModel? model) {
+      controller = TabController(length: model?.tabs.length ?? 0, vsync: this);
+      tabs = model?.tabs ?? [];
+      update();
     });
   }
 
-  Future<void> loadData({loadMore = false}) async {
-    if (loadMore) {
-      pageIndex++;
-    } else {
-      pageIndex = 1;
-    }
-    try {
-      TravelTabModel? model =
-          await TravelDao.getTravels(groupChannelCode, pageIndex, 10);
-      List<TravelItem> items = _filterItems(model?.list);
-      if (items.isEmpty) {
-        pageIndex--;
-      }
-      loading.value = false;
-      if (!loadMore) {
-        travelItems.clear();
-      }
-      travelItems.addAll(items);
-    } catch (e) {
-      debugPrint(e.toString());
-      loading.value = false;
-      if (loadMore) {
-        pageIndex--;
-      }
-    }
-  }
-
-  ///移除article为空的模型
-  List<TravelItem> _filterItems(List<TravelItem>? list) {
-    if (list == null) return [];
-    List<TravelItem> filterItems = [];
-    for (var item in list) {
-      if (item.article != null) {
-        filterItems.add(item);
-      }
-    }
-    return filterItems;
+  @override
+  void onClose() {
+    super.onClose();
+    controller.dispose();
   }
 }
